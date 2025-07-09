@@ -1,5 +1,6 @@
 variable "prefix" {
   description = "A prefix used for all resources in this example"
+  default = "aks-keycloak"
 }
 
 variable "location" {
