@@ -1,7 +1,8 @@
 name: Destroy Azure AKS With Terraform
 
 on:
-  workflow_dispatch:  # Allows manual trigger from GitHub UI
+  push:
+    branches: [ "destroy" ]  # Only runs on destroy branch
 
 permissions:
   id-token: write
@@ -37,6 +38,9 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
+
+      - name: Terraform Validate
+        run: terraform validate
 
       - name: Terraform Destroy
         run: terraform destroy -auto-approve
