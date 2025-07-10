@@ -1,64 +1,61 @@
 name: Create Azure AKS With Terraform
-
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
+      - '!destroy'   # exclude destroy branch
   pull_request:
-    branches: [ "main" ]
-
-env:
-  BASE_DIR: ${{ github.workspace }}
-  TF_ENV: aks
-
+    branches:
+      - main
+      
 permissions:
-  id-token: write
-  contents: read
-
+      id-token: write
+      contents: read
 jobs: 
-  AKS-Cluster-Deployment:
+  create-aks:
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        shell: bash
+        working-directory: aks-cluster
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Azure Login
+        
+      - name: 'Az CLI login'
         uses: azure/login@v1
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
+  
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: latest
 
       - name: Terraform Init
-        working-directory: ${{ env.BASE_DIR }}/aks-cluster
-        run: |
-          terraform init \
-            -backend-config="resource_group_name=my-tf-rg" \
-            -backend-config="storage_account_name=mytfstateacct" \
-            -backend-config="container_name=tfstate" \
-            -backend-config="key=aks/${TF_ENV}/terraform.tfstate"
-
-      - name: Select Workspace
-        working-directory: ${{ env.BASE_DIR }}/aks-cluster
-        run: terraform workspace select ${TF_ENV} || terraform workspace new ${TF_ENV}
-
+        id: init
+        run: terraform init
+        
+      - name: Select Terraform Workspace
+        run: terraform workspace select aks || terraform workspace new aks
+      
       - name: Terraform Validate
-        working-directory: ${{ env.BASE_DIR }}/aks-cluster
+        id: validate
         run: terraform validate
 
       - name: Terraform Plan
-        working-directory: ${{ env.BASE_DIR }}/aks-cluster
+        id: plan
         run: terraform plan
+        continue-on-error: true
+
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
 
       - name: Terraform Apply
-        working-directory: ${{ env.BASE_DIR }}/aks-cluster
         run: terraform apply -auto-approve
 
       - name: Terraform Output
-        working-directory: ${{ env.BASE_DIR }}/aks-cluster
         run: terraform output
