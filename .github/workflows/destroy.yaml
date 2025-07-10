@@ -3,10 +3,17 @@ name: Destroy Azure AKS With Terraform
 on:
   workflow_dispatch:
     inputs:
+      environment:
+        description: "Terraform workspace name (e.g. dev, aks, prod)"
+        required: true
+        default: "aks"
       destroy:
         description: "Set to true to confirm destruction"
         required: true
         default: "false"
+
+env:
+  BASE_DIR: ${{ github.workspace }}
 
 permissions:
   id-token: write
@@ -20,10 +27,6 @@ jobs:
   destroy:
     if: ${{ github.event.inputs.destroy == 'true' }}
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-        working-directory: aks-cluster
 
     steps:
       - name: Checkout code
@@ -41,14 +44,23 @@ jobs:
         with:
           terraform_version: latest
 
-      - name: Terraform Init
-        run: terraform init
+      - name: Terraform Init with Dynamic Backend Key
+        working-directory: ${{ env.BASE_DIR }}/aks-cluster
+        run: |
+          terraform init \
+            -backend-config="resource_group_name=my-tf-rg" \
+            -backend-config="storage_account_name=mytfstateacct" \
+            -backend-config="container_name=tfstate" \
+            -backend-config="key=aks/${{ github.event.inputs.environment }}/terraform.tfstate"
 
       - name: Select Workspace
-        run: terraform workspace select aks || terraform workspace new aks
+        working-directory: ${{ env.BASE_DIR }}/aks-cluster
+        run: terraform workspace select ${{ github.event.inputs.environment }} || terraform workspace new ${{ github.event.inputs.environment }}
 
       - name: Terraform Validate
+        working-directory: ${{ env.BASE_DIR }}/aks-cluster
         run: terraform validate
 
       - name: Terraform Destroy
+        working-directory: ${{ env.BASE_DIR }}/aks-cluster
         run: terraform destroy -auto-approve

@@ -1,37 +1,52 @@
 name: Configure Cluster
 
 on:
-  push:
-    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Terraform workspace name (e.g. aks, dev, prod)"
+        required: true
+        default: "aks"
+
+env:
+  BASE_DIR: ${{ github.workspace }}
+  TF_ENV: ${{ github.event.inputs.environment }}
 
 permissions:
-      id-token: write
-      contents: read
+  id-token: write
+  contents: read
+
 jobs:
   configure:
     runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
 
-    - name: Azure Login
-      uses: azure/login@v1
-      with:
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-    - name: Get AKS credentials
-      run: az aks get-credentials --resource-group aks-keycloak-k8s-resources --name aks-keycloak-k8s --file ~/.kube/config
 
-    - name: Install Ansible and K8s collection
-      run: |
-        pip install ansible
-        ansible-galaxy collection install kubernetes.core
-        pip install kubernetes
+      - name: Get AKS credentials
+        run: |
+          az aks get-credentials \
+            --resource-group aks-keycloak-k8s-resources \
+            --name aks-keycloak-k8s \
+            --file ~/.kube/config
 
-    - name: Run Playbooks
-      run: |
-        ansible-playbook ansible/playbooks/deploy_namespace.yaml
-        ansible-playbook ansible/playbooks/deploy_keycloak.yaml
-        ansible-playbook ansible/playbooks/deploy_postgres.yaml
-        ansible-playbook ansible/playbooks/deploy_web.yaml
-        ansible-playbook ansible/playbooks/deploy_configmap.yaml
+      - name: Install Ansible and Kubernetes collection
+        run: |
+          pip install ansible kubernetes
+          ansible-galaxy collection install kubernetes.core
+
+      - name: Run Ansible Playbooks
+        run: |
+          ansible-playbook ansible/playbooks/deploy_namespace.yaml
+          ansible-playbook ansible/playbooks/deploy_keycloak.yaml
+          ansible-playbook ansible/playbooks/deploy_postgres.yaml
+          ansible-playbook ansible/playbooks/deploy_web.yaml
+          ansible-playbook ansible/playbooks/deploy_configmap.yaml
