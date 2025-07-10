@@ -5,48 +5,53 @@ on:
     branches: [ main ]
 
 permissions:
-      id-token: write
-      contents: read
+  id-token: write
+  contents: read
+
 jobs:
   configure:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Azure Login
-      uses: azure/login@v1
-      with:
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-    - name: Check if AKS exists
-      id: check_aks
-      run: |
-        if az aks show --resource-group aks-keycloak-k8s-resources --name aks-keycloak-k8s &>/dev/null; then
-          echo "exists=true" >> $GITHUB_OUTPUT
-        else
-          echo "exists=false" >> $GITHUB_OUTPUT
-        fi
 
-    - name: Exit if AKS doesn't exist
-      if: steps.check_aks.outputs.exists == 'false'
-      run: |
-        echo "AKS cluster not found. Skipping configuration."
-        exit 0
+      - name: Check if AKS exists
+        id: check_aks
+        run: |
+          if az aks show --resource-group aks-keycloak-k8s-resources --name aks-keycloak-k8s &>/dev/null; then
+            echo "exists=true" >> $GITHUB_ENV
+          else
+            echo "exists=false" >> $GITHUB_ENV
+          fi
 
-    - name: Get AKS credentials
-      run: az aks get-credentials --resource-group aks-keycloak-k8s-resources --name aks-keycloak-k8s --file ~/.kube/config
+      - name: Exit if AKS doesn't exist
+        if: env.exists == 'false'
+        run: |
+          echo "AKS cluster not found. Skipping configuration."
+          exit 0
 
-    - name: Install Ansible and K8s collection
-      run: |
-        pip install ansible
-        ansible-galaxy collection install kubernetes.core
-        pip install kubernetes
+      - name: Get AKS credentials
+        if: env.exists == 'true'
+        run: az aks get-credentials --resource-group aks-keycloak-k8s-resources --name aks-keycloak-k8s --file ~/.kube/config
 
-    - name: Run Playbooks
-      run: |
-        ansible-playbook ansible/playbooks/deploy_namespace.yaml
-        ansible-playbook ansible/playbooks/deploy_keycloak.yaml
-        ansible-playbook ansible/playbooks/deploy_postgres.yaml
-        ansible-playbook ansible/playbooks/deploy_web.yaml
-        ansible-playbook ansible/playbooks/deploy_configmap.yaml
+      - name: Install Ansible and K8s collection
+        if: env.exists == 'true'
+        run: |
+          pip install ansible
+          ansible-galaxy collection install kubernetes.core
+          pip install kubernetes
+
+      - name: Run Playbooks
+        if: env.exists == 'true'
+        run: |
+          ansible-playbook ansible/playbooks/deploy_namespace.yaml
+          ansible-playbook ansible/playbooks/deploy_keycloak.yaml
+          ansible-playbook ansible/playbooks/deploy_postgres.yaml
+          ansible-playbook ansible/playbooks/deploy_web.yaml
+          ansible-playbook ansible/playbooks/deploy_configmap.yaml
