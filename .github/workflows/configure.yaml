@@ -3,7 +3,10 @@ name: Configure Cluster
 on:
   push:
     branches: [ main ]
-
+    
+permissions:
+      id-token: write
+      contents: read
 jobs:
   configure:
     runs-on: ubuntu-latest
