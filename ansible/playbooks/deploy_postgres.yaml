@@ -5,4 +5,4 @@
       kubernetes.core.k8s:
         kubeconfig: ~/.kube/config
         state: present
-        src: kube/postgres.yaml
+        src: ../../kube/postgres.yaml
