@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-html
+  namespace: keycloak-app
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head><title>Keycloak Secured Page</title></head>
+    <body>
+    <h1>Welcome to the secure app!</h1>
+    </body>
+    </html>

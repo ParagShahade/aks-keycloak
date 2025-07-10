@@ -21,16 +21,21 @@ spec:
           mountPath: /usr/share/nginx/html
       volumes:
       - name: web-content
-        hostPath:
-          path: /absolute/path/to/web
-          type: Directory
+        configMap:
+          name: web-html
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        volumeMounts:
+        - name: web-content
+          mountPath: /usr/share/nginx/html
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: web
+  namespace: keycloak-app
 spec:
-  type: LoadBalancer
   selector:
     app: web
   ports:

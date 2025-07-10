@@ -1,0 +1,9 @@
+- name: Deploy Keycloak static web application ConfigMap
+  hosts: localhost
+  tasks:
+    - name: Apply Keycloak deployment web ConfigMap
+      kubernetes.core.k8s:
+        kubeconfig: ~/.kube/config
+        state: present
+        src: ../../kube/configmap.yaml
+        namespace: keycloak-app
