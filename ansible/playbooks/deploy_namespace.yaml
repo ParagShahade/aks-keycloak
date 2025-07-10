@@ -1,10 +1,8 @@
-- name: Deploy Keycloak postgres
+- name: creaete namespace for keycloak
   hosts: localhost
   tasks:
     - name: Apply Keycloak deployment
       kubernetes.core.k8s:
         kubeconfig: ~/.kube/config
         state: present
-        src: ../../kube/postgres.yaml
-        namespace: keycloak-app
-
+        src: ../../kube/namespace.yaml

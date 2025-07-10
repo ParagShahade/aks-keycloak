@@ -1,4 +1,4 @@
-- name: Deploy Keycloak
+- name: Deploy Keycloak static web application
   hosts: localhost
   tasks:
     - name: Apply Keycloak deployment
