@@ -1,11 +1,11 @@
 name: Destroy Azure AKS With Terraform
 
 on:
-  push:
-    branches: [ "main" ]
+  workflow_dispatch:
   pull_request:
-    branches: [ "main" ]
-
+    branches:
+      - destroy
+      
 permissions:
   id-token: write
   contents: read
