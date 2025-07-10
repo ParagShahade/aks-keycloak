@@ -36,6 +36,9 @@ jobs:
       - name: Terraform Init
         id: init
         run: terraform init
+        
+      - name: Select Terraform Workspace
+        run: terraform workspace select aks || terraform workspace new aks
       
       - name: Terraform Validate
         id: validate
