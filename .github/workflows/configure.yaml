@@ -1,7 +1,8 @@
 name: Configure Cluster
 
 on:
-  workflow_dispatch: 
+  push:
+    branches: [ main ]
 
 permissions:
       id-token: write
@@ -18,6 +19,21 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    - name: Check if AKS exists
+      id: check_aks
+      run: |
+        if az aks show --resource-group aks-keycloak-k8s-resources --name aks-keycloak-k8s &>/dev/null; then
+          echo "exists=true" >> $GITHUB_OUTPUT
+        else
+          echo "exists=false" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Exit if AKS doesn't exist
+      if: steps.check_aks.outputs.exists == 'false'
+      run: |
+        echo "AKS cluster not found. Skipping configuration."
+        exit 0
+
     - name: Get AKS credentials
       run: az aks get-credentials --resource-group aks-keycloak-k8s-resources --name aks-keycloak-k8s --file ~/.kube/config
 
