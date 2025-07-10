@@ -1,4 +1,4 @@
-/*resource "azurerm_resource_group" "example" {
+resource "azurerm_resource_group" "example" {
   name     = "${var.prefix}-k8s-resources"
   location = var.location
 }
@@ -19,4 +19,3 @@ resource "azurerm_kubernetes_cluster" "example" {
     type = "SystemAssigned"
   }
 }
-*/
