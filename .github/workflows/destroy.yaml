@@ -2,6 +2,11 @@ name: Destroy Azure AKS With Terraform
 
 on:
   workflow_dispatch:
+    inputs:
+      destroy:
+        description: "Set to true to confirm destruction"
+        required: true
+        default: "false"
 
 permissions:
   id-token: write
@@ -13,6 +18,7 @@ concurrency:
 
 jobs:
   destroy:
+    if: ${{ github.event.inputs.destroy == 'true' }}
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -37,6 +43,9 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
+
+      - name: Select Workspace
+        run: terraform workspace select aks || terraform workspace new aks
 
       - name: Terraform Validate
         run: terraform validate
