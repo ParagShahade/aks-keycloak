@@ -17,6 +17,6 @@ jobs:
 
     - name: Run Playbooks
       run: |
-        ansible-playbook ansible/playbook/deploy_keycloak.yml
-        ansible-playbook ansible/playbook/deploy_postgres.yml
-        ansible-playbook ansible/playbook/deploy_web.yml
+        ansible-playbook ansible/playbooks/deploy_keycloak.yml
+        ansible-playbook ansible/playbooks/deploy_postgres.yml
+        ansible-playbook ansible/playbooks/deploy_web.yml
