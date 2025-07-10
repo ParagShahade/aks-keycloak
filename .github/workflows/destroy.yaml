@@ -1,7 +1,22 @@
 name: Destroy Azure AKS With Terraform
 
 on:
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
+    inputs:
+      environment:
+        description: "Terraform workspace name (e.g. dev, aks, prod)"
+        required: true
+        default: "aks"
+      destroy:
+        description: "Set to true to confirm destruction"
+        required: true
+        default: "false"
+
+env:
+  BASE_DIR: ${{ github.workspace }}
 
 permissions:
   id-token: write
@@ -13,7 +28,9 @@ concurrency:
 
 jobs:
   destroy:
-    if: ${{ github.event.inputs.destroy == 'true' }}
+    if: >
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.destroy == 'true') ||
+      (github.event_name == 'pull_request' && contains(join(github.event.pull_request.labels.*.name, ','), 'destroy'))
     runs-on: ubuntu-latest
 
     steps:
@@ -39,11 +56,11 @@ jobs:
             -backend-config="resource_group_name=my-tf-rg" \
             -backend-config="storage_account_name=mytfstateacct" \
             -backend-config="container_name=tfstate" \
-            -backend-config="key=aks/${{ github.event.inputs.environment }}/terraform.tfstate"
+            -backend-config="key=aks/${{ github.event.inputs.environment || github.head_ref }}/terraform.tfstate"
 
       - name: Select Workspace
         working-directory: ${{ env.BASE_DIR }}/aks-cluster
-        run: terraform workspace select ${{ github.event.inputs.environment }} || terraform workspace new ${{ github.event.inputs.environment }}
+        run: terraform workspace select ${{ github.event.inputs.environment || github.head_ref }} || terraform workspace new ${{ github.event.inputs.environment || github.head_ref }}
 
       - name: Terraform Validate
         working-directory: ${{ env.BASE_DIR }}/aks-cluster
