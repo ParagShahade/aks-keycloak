@@ -8,7 +8,16 @@ jobs:
   configure:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v3
+
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    - name: Get AKS credentials
+      run: az aks get-credentials --resource-group aks-keycloak-k8s-resources --name aks-keycloak-k8s --file ~/.kube/config
 
     - name: Install Ansible and K8s collection
       run: |
