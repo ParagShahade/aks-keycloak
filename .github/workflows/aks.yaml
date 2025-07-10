@@ -3,11 +3,10 @@ on:
   push:
     branches:
       - main
-      - '!destroy'   # exclude destroy branch
   pull_request:
     branches:
       - main
-      
+
 permissions:
       id-token: write
       contents: read
