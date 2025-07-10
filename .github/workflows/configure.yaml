@@ -1,0 +1,22 @@
+name: Configure Cluster
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  configure:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install Ansible and K8s collection
+      run: |
+        pip install ansible
+        ansible-galaxy collection install kubernetes.core
+
+    - name: Run Playbooks
+      run: |
+        ansible-playbook ansible/playbooks/deploy_keycloak.yml
+        ansible-playbook ansible/playbooks/deploy_postgres.yml
+        ansible-playbook ansible/playbooks/deploy_web.yml
