@@ -2,6 +2,9 @@ name: Destroy Azure AKS With Terraform
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - destroy
   pull_request:
     branches:
       - destroy
@@ -43,6 +46,9 @@ jobs:
 
       - name: Terraform Validate
         run: terraform validate
+            
+      - name: Terraform Plan (Destroy)
+        run: terraform plan -destroy
 
       - name: Terraform Destroy
         run: terraform destroy -auto-approve
