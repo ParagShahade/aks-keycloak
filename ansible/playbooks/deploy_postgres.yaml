@@ -6,3 +6,5 @@
         kubeconfig: ~/.kube/config
         state: present
         src: ../../kube/postgres.yaml
+        namespace: keycloak-app
+
