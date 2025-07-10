@@ -33,3 +33,4 @@ jobs:
         ansible-playbook ansible/playbooks/deploy_keycloak.yaml
         ansible-playbook ansible/playbooks/deploy_postgres.yaml
         ansible-playbook ansible/playbooks/deploy_web.yaml
+        ansible-playbook ansible/playbooks/deploy_namespace.yaml
