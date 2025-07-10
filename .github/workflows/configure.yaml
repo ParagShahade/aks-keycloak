@@ -3,7 +3,7 @@ name: Configure Cluster
 on:
   push:
     branches: [ main ]
-    
+
 permissions:
       id-token: write
       contents: read
@@ -26,6 +26,7 @@ jobs:
       run: |
         pip install ansible
         ansible-galaxy collection install kubernetes.core
+        pip install kubernetes
 
     - name: Run Playbooks
       run: |
