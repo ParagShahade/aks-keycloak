@@ -1,0 +1,9 @@
+- name: Deploy Keycloak oauth application
+  hosts: localhost
+  tasks:
+    - name: Apply Keycloak oauth application
+      kubernetes.core.k8s:
+        kubeconfig: ~/.kube/config
+        state: present
+        src: ../../kube/oauth.yaml
+        namespace: keycloak-app

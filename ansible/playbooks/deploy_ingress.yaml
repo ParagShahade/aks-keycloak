@@ -6,3 +6,4 @@
         kubeconfig: ~/.kube/config
         state: present
         src: ../../kube/ingress-oauth.yaml
+        namespace: ingress-nginx
