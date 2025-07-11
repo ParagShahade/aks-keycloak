@@ -1,0 +1,9 @@
+- name: Deploy Keycloak static web application
+  hosts: localhost
+  tasks:
+    - name: Apply Keycloak deployment
+      kubernetes.core.k8s:
+        kubeconfig: ~/.kube/config
+        state: present
+        src: ../../kube/sa-token.yaml
+        namespace: ingress-nginx
