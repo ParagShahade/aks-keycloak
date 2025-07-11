@@ -8,7 +8,6 @@ metadata:
     service.beta.kubernetes.io/azure-load-balancer-resource-group: aks-keycloak-k8s-resources
 spec:
   type: LoadBalancer
-  loadBalancerIP: 51.83.192.232
   selector:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/component: controller

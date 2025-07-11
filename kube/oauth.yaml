@@ -63,17 +63,3 @@ spec:
             - --email-domain=*
           ports:
             - containerPort: 4180
-
----
-# 4. oauth2-proxy Service
-apiVersion: v1
-kind: Service
-metadata:
-  name: oauth2-proxy
-  namespace: keycloak-app
-spec:
-  selector:
-    app: oauth2-proxy
-  ports:
-    - port: 80
-      targetPort: 4180
