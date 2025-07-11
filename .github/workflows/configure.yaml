@@ -1,8 +1,12 @@
+# .github/workflows/configure-cluster.yml
+
 name: Configure Cluster
 
 on:
-  push:
-    branches: [ main ]
+  workflow_run:
+    workflows: ["Create Azure AKS With Terraform"]
+    types:
+      - completed
 
 permissions:
   id-token: write
@@ -10,6 +14,7 @@ permissions:
 
 jobs:
   configure:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
