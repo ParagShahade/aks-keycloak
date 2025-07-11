@@ -1,6 +1,18 @@
 - name: Deploy Keycloak ingress and web application
   hosts: localhost
   tasks:
+    - name: Remove azure-load-balancer-resource-group annotation if present on ingress-nginx-controller
+      kubernetes.core.k8s_json_patch:
+        kubeconfig: ~/.kube/config
+        name: ingress-nginx-controller
+        namespace: ingress-nginx
+        kind: Service
+        api_version: v1
+        patch:
+          - op: remove
+            path: /metadata/annotations/service.beta.kubernetes.io~1azure-load-balancer-resource-group
+      ignore_errors: true
+
     - name: Apply Keycloak ingress and web application
       kubernetes.core.k8s:
         kubeconfig: ~/.kube/config
