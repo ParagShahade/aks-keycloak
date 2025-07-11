@@ -60,3 +60,4 @@ jobs:
           ansible-playbook ansible/playbooks/deploy_postgres.yaml
           ansible-playbook ansible/playbooks/deploy_web.yaml
           ansible-playbook ansible/playbooks/deploy_configmap.yaml
+          ansible-playbook ansible/playbooks/deploy_ingress.yaml
