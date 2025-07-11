@@ -1,9 +1,9 @@
 variable "prefix" {
   description = "A prefix used for all resources in this example"
-  #default = "aks-keycloak"
+  default = "aks-keycloak"
 }
 
 variable "location" {
   description = "The Azure Region in which all resources in this example should be provisioned"
-  #default     = "West Europe"
+  default     = "West Europe"
 }
