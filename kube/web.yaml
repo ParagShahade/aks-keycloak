@@ -31,7 +31,6 @@ metadata:
   name: web
   namespace: keycloak-app
 spec:
-  type: LoadBalancer
   selector:
     app: web
   ports:
