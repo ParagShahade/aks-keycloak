@@ -4,8 +4,6 @@ kind: Service
 metadata:
   name: ingress-nginx-controller
   namespace: ingress-nginx
-  annotations:
-    service.beta.kubernetes.io/azure-load-balancer-resource-group: aks-keycloak-k8s-resources
 spec:
   type: LoadBalancer
   selector:
