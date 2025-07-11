@@ -5,5 +5,5 @@
       kubernetes.core.k8s:
         kubeconfig: ~/.kube/config
         state: present
-        src: ../../kube/ingress-oauth.yaml
+        src: ../../kube/ingress.yaml
         namespace: ingress-nginx
