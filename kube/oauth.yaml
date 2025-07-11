@@ -1,5 +1,3 @@
----
-# 2. Ingress for oauth2-proxy + web app
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -7,11 +5,14 @@ metadata:
   namespace: keycloak-app
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/configuration-snippet: |
       proxy_set_header X-Real-IP $remote_addr;
       proxy_set_header X-Scheme $scheme;
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    kubernetes.io/ingress.class: nginx
 spec:
+  ingressClassName: nginx
   rules:
     - host: auth.web.com
       http:
