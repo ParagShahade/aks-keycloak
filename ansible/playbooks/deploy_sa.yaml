@@ -1,9 +1,10 @@
-- name: Deploy Keycloak static web application
+- name: Deploy Keycloak sa-token
   hosts: localhost
   tasks:
-    - name: Apply Keycloak deployment
+    - name: Apply Keycloak service account
       kubernetes.core.k8s:
         kubeconfig: ~/.kube/config
         state: present
+        apply: yes          
         src: ../../kube/sa-token.yaml
         namespace: ingress-nginx

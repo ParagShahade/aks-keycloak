@@ -1,8 +1,7 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  creationTimestamp: "2025-07-11T12:35:58Z"
   name: ingress-nginx
   namespace: ingress-nginx
-  resourceVersion: "81616"
-  uid: cb5ed39a-46bb-4e33-8ca4-cdf04b6a612f
+  annotations:
+    my-annotation: "value"

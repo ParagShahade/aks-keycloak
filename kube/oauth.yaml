@@ -54,7 +54,7 @@ spec:
           args:
             - --provider=keycloak
             - --client-id=test-web-app
-            - --client-secret=dtSbHmJCilEw4ogEfS5UlLUJ7yRCHBhL
+            - --client-secret=dHL8BsCV8wVGaCniCsUFUiUNhg16fdas
             - --cookie-secret=I_YJeqruh1s9xslMcJDh4eeUXBfMeRUVDvfb0FolMec=
             - --redirect-url=http://auth.web.com/oauth2/callback
             - --upstream=http://web.keycloak-app.svc.cluster.local:80/
