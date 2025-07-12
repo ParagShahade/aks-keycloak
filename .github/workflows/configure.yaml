@@ -43,7 +43,7 @@ jobs:
 
       - name: Get AKS credentials
         if: steps.check_aks.outputs.exists == 'true'
-        run: az aks get-credentials --resource-group keycloak-k8s-resources --name aks-keycloak-k8s --file ~/.kube/config
+        run: az aks get-credentials --resource-group keycloak-k8s-resources --name keycloak-k8s --file ~/.kube/config
 
       - name: Install Ansible and K8s collection
         if: steps.check_aks.outputs.exists == 'true'
