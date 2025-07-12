@@ -29,7 +29,7 @@ jobs:
       - name: Check if AKS exists
         id: check_aks
         run: |
-          if az aks show --resource-group aks-keycloak-k8s-resources --name aks-keycloak-k8s &>/dev/null; then
+          if az aks show --resource-group keycloak-k8s-resources --name keycloak-k8s &>/dev/null; then
             echo "exists=true" >> $GITHUB_OUTPUT
           else
             echo "exists=false" >> $GITHUB_OUTPUT
