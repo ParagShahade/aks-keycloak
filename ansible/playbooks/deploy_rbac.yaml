@@ -16,7 +16,7 @@
         kind: Deployment
         name: ingress-nginx-controller
         namespace: ingress-nginx
-        merge_type: strategic
+        merge_type: strategic-merge
         definition:
           spec:
             template:
