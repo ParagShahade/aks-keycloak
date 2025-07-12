@@ -1,17 +1,29 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: web-ingress
+  name: web-app-ingress
   namespace: keycloak-app
   annotations:
     kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.ingress.kubernetes.io/auth-url: "http://oauth2-proxy.keycloak-app.svc.cluster.local/oauth2/auth"
     nginx.ingress.kubernetes.io/auth-signin: "http://auth.web.com/oauth2/start"
+
 spec:
+  ingressClassName: nginx
   rules:
     - host: auth.web.com
       http:
         paths:
+          - path: /oauth2(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: oauth2-proxy
+                port:
+                  number: 80
           - path: /(.*)
             pathType: ImplementationSpecific
             backend:
@@ -39,8 +51,9 @@ spec:
         - name: oauth2-proxy
           image: quay.io/oauth2-proxy/oauth2-proxy:v7.5.1
           args:
-            - --provider=oidc
-            - --oidc-issuer-url=http://keycloak.keycloak.svc.cluster.local:8080/realms/master
+            - --provider=keycloak
+            - --keycloak-issuer-url=http://keycloak.keycloak-app.svc.cluster.local:8080/realms/master
+            - --keycloak-realm=master
             - --client-id=test-web-app
             - --client-secret=dHL8BsCV8wVGaCniCsUFUiUNhg16fdas
             - --cookie-secret=1yfnVuLpJ88jiKQEBEJ6f274JZYvsYsC3d9MPsSJ7Gk=
@@ -50,8 +63,6 @@ spec:
             - --cookie-secure=false
             - --cookie-path=/
             - --email-domain=*
-            - --scope=openid email profile
-            - --insecure-oidc-allow-unverified-email=true
             - --log-level=debug               # Enable debug logging here
           ports:
             - containerPort: 4180
