@@ -52,8 +52,6 @@ spec:
           image: quay.io/oauth2-proxy/oauth2-proxy:v7.5.1
           args:
             - --provider=keycloak
-            - --keycloak-issuer-url=http://keycloak.keycloak-app.svc.cluster.local:8080/realms/master
-            - --keycloak-realm=master
             - --client-id=test-web-app
             - --client-secret=dHL8BsCV8wVGaCniCsUFUiUNhg16fdas
             - --cookie-secret=1yfnVuLpJ88jiKQEBEJ6f274JZYvsYsC3d9MPsSJ7Gk=
