@@ -11,13 +11,6 @@ spec:
     - host: auth.web.com
       http:
         paths:
-          - path: /oauth2(/|$)(.*)
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: oauth2-proxy
-                port:
-                  number: 80
           - path: /(.*)
             pathType: ImplementationSpecific
             backend:
