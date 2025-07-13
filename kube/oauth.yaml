@@ -62,6 +62,7 @@ spec:
             - --cookie-path=/
             - --email-domain=*
             - --oidc-issuer-url=http://keycloak.keycloak-app.svc.cluster.local:8080/realms/master
+            - --skip-provider-button=true
             - --scope=openid email profile
           env:
             - name: CLIENT_SECRET
