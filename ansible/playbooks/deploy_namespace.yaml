@@ -1,4 +1,4 @@
-- name: creaete namespace for keycloak
+- name: create namespace for keycloak
   hosts: localhost
   tasks:
     - name: Apply Keycloak deployment

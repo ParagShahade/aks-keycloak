@@ -8,31 +8,3 @@
         state: present
         src: ../../kube/rbac.yaml
         namespace: ingress-nginx
-
-    - name: Patch ingress-nginx-controller deployment to use correct ServiceAccount
-      kubernetes.core.k8s:
-        kubeconfig: ~/.kube/config
-        api_version: apps/v1
-        kind: Deployment
-        name: ingress-nginx-controller
-        namespace: ingress-nginx
-        merge_type: strategic-merge
-        definition:
-          spec:
-            template:
-              spec:
-                serviceAccountName: ingress-nginx
-
-    - name: Restart ingress-nginx-controller deployment
-      kubernetes.core.k8s:
-        kubeconfig: ~/.kube/config
-        api_version: apps/v1
-        kind: Deployment
-        name: ingress-nginx-controller
-        namespace: ingress-nginx
-        definition:
-          spec:
-            template:
-              metadata:
-                annotations:
-                  kubectl.kubernetes.io/restartedAt: "{{ lookup('pipe', 'date +%Y-%m-%dT%H:%M:%S') }}"

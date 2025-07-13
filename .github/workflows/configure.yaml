@@ -56,8 +56,10 @@ jobs:
         if: steps.check_aks.outputs.exists == 'true'
         run: |
           ansible-playbook ansible/playbooks/deploy_namespace.yaml
-          ansible-playbook ansible/playbooks/deploy_keycloak.yaml
+          ansible-playbook ansible/playbooks/deploy_secrets.yaml
+          ansible-playbook ansible/playbooks/deploy_pvc.yaml
           ansible-playbook ansible/playbooks/deploy_postgres.yaml
+          ansible-playbook ansible/playbooks/deploy_keycloak.yaml
           ansible-playbook ansible/playbooks/deploy_web.yaml
           ansible-playbook ansible/playbooks/deploy_configmap.yaml
           ansible-playbook ansible/playbooks/deploy_rbac.yaml
