@@ -1,4 +1,6 @@
-# 0. ingress-nginx controller Deployment
+# ingress.yaml - Deploys NGINX Ingress Controller and related resources
+
+# NGINX Ingress Controller Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -45,13 +47,14 @@ spec:
             - name: https
               containerPort: 443
 ---
+# Service to expose the Ingress Controller
 apiVersion: v1
 kind: Service
 metadata:
   name: ingress-nginx-controller
   namespace: ingress-nginx
 spec:
-  type: LoadBalancer
+  type: LoadBalancer # Exposes ingress controller externally
   selector:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/component: controller
@@ -63,6 +66,7 @@ spec:
       port: 443
       targetPort: https
 ---
+# IngressClass for NGINX
 apiVersion: networking.k8s.io/v1
 kind: IngressClass
 metadata:

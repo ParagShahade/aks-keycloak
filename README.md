@@ -1,117 +1,119 @@
 # AKS Keycloak Deployment
 
-This project deploys a complete Keycloak authentication system on Azure Kubernetes Service (AKS) with OAuth2 proxy integration.
+This project deploys a secure authentication system on Azure Kubernetes Service (AKS) using Keycloak, OAuth2 Proxy, PostgreSQL, and a static web app. All infrastructure is managed with Terraform, configuration is automated with Ansible, and CI/CD is handled by GitHub Actions.
 
-## Architecture
+---
 
-The deployment includes:
-- **Keycloak**: Identity and Access Management server
-- **PostgreSQL**: Database for Keycloak with persistent storage
-- **OAuth2 Proxy**: Authentication proxy for securing web applications
-- **Nginx Ingress Controller**: Load balancer and SSL termination
-- **Web Application**: Sample secured application
+**Components:**
+- **Keycloak:** Open-source identity and access management (IAM)
+- **PostgreSQL:** Database for Keycloak
+- **OAuth2 Proxy:** Secures the web app using OIDC with Keycloak
+- **NGINX Ingress Controller:** Routes and load-balances traffic
+- **Static Web App:** Example app protected by OIDC
+- **Terraform:** Provisions all Azure infrastructure
+- **Ansible:** Automates Kubernetes resource deployment
+- **GitHub Actions:** CI/CD for rollout, configuration, and teardown
 
-## Prerequisites
+---
 
-- Azure CLI
-- Terraform
-- kubectl
-- Ansible
+## Justification
+
+### Why these components?
+- **Keycloak:** Open-source, flexible IAM with OIDC/SAML support.
+- **OAuth2 Proxy:** Stateless, simple OIDC protection for web apps.
+- **PostgreSQL:** Reliable, open-source RDBMS, default for Keycloak.
+- **NGINX Ingress:** Standard, widely supported for Kubernetes.
+- **Terraform:** Declarative, reproducible, and cloud-agnostic IaC.
+- **Ansible:** Agentless, easy to orchestrate K8s deployments.
+- **GitHub Actions:** Native CI/CD, integrates with GitHub and cloud.
+
+### Why not alternatives?
+- Managed identity/service principal creation is out of scope.
+- Other orchestrators (ECS, ACI) lack AKS/K8s features.
+- Auth0/Azure AD: Not open-source or less customizable for this demo.
+
+---
+
+## CI/CD Workflows
+
+- **Rollout:** Provisions infrastructure (Terraform) and deploys apps (Ansible).
+- **Configure:** Updates app configs, secrets, or rolling updates (Ansible).
+- **Disassemble:** Destroys all infrastructure (`terraform destroy`).
+
+Workflows are triggered via GitHub Actions (`.github/workflows/`).
+
+---
 
 ## Deployment
 
-### 1. Infrastructure Setup
+### 1. Provision Infrastructure
 
 ```bash
 cd aks-cluster
 terraform init
-terraform plan
 terraform apply
 ```
 
-### 2. Application Deployment
+### 2. Deploy Applications
 
-The application is automatically deployed via GitHub Actions when infrastructure is created.
+GitHub Actions will automatically deploy on push.
+Manual deployment (if needed):
 
-Manual deployment:
 ```bash
-# Deploy namespaces
 ansible-playbook ansible/playbooks/deploy_namespace.yaml
-
-# Deploy secrets
-ansible-playbook ansible/playbooks/deploy_secrets.yaml
-
-# Deploy persistent storage
-ansible-playbook ansible/playbooks/deploy_pvc.yaml
-
-# Deploy database
 ansible-playbook ansible/playbooks/deploy_postgres.yaml
-
-# Deploy Keycloak
 ansible-playbook ansible/playbooks/deploy_keycloak.yaml
-
-# Deploy web application
 ansible-playbook ansible/playbooks/deploy_web.yaml
 ansible-playbook ansible/playbooks/deploy_configmap.yaml
-
-# Deploy RBAC and ingress
 ansible-playbook ansible/playbooks/deploy_rbac.yaml
 ansible-playbook ansible/playbooks/deploy_sa.yaml
 ansible-playbook ansible/playbooks/deploy_ingress.yaml
-
-# Deploy OAuth2 proxy
 ansible-playbook ansible/playbooks/deploy_oauth.yaml
 ```
 
-## Security Features
+---
 
-- **Kubernetes Secrets**: Sensitive data stored in encrypted secrets
-- **HTTPS/TLS**: SSL termination with Let's Encrypt certificates
-- **Resource Limits**: CPU and memory limits for all containers
-- **Health Checks**: Liveness and readiness probes
-- **Persistent Storage**: Database data persistence
+## Access
 
-## Configuration
+- **Keycloak Admin Console:** `http://<keycloak-service-ip>:8080`
+- **Secured Web App:** `http://auth.web.com`
 
-### Keycloak Admin
-- Username: `admin`
-- Password: `admin` (stored in Kubernetes secret)
+> **Note:** This deployment uses HTTP only. For production, it is strongly recommended to enable TLS/HTTPS using cert-manager or another certificate management solution.
 
-### OAuth2 Proxy
-- Client ID: `test-web-app`
-- Redirect URL: `https://auth.web.com/oauth2/callback`
+---
 
-## Access Points
+## Cleanup / Disassemble
 
-- **Keycloak Admin Console**: `http://<keycloak-service-ip>:8080`
-- **Secured Web App**: `https://auth.web.com`
-
-## Monitoring
-
-All containers include:
-- Resource monitoring
-- Health check endpoints
-- Logging to stdout/stderr
-
-## Troubleshooting
-
-1. **Check pod status**: `kubectl get pods -n keycloak-app`
-2. **View logs**: `kubectl logs <pod-name> -n keycloak-app`
-3. **Check services**: `kubectl get svc -n keycloak-app`
-4. **Verify secrets**: `kubectl get secrets -n keycloak-app`
-
-## Cleanup
+To destroy all infrastructure and clean up resources:
 
 ```bash
 cd aks-cluster
 terraform destroy
 ```
+Or trigger the **Disassemble** workflow in GitHub Actions.
+
+---
+
+## Extending the Project
+
+- **TLS/HTTPS** with cert-manager for secure traffic
+- **Monitoring** with Prometheus/Grafana
+- **Autoscaling** and advanced deployment strategies
+- **Automated secret rotation** and backup/restore
+
+---
 
 ## Security Notes
 
-⚠️ **Important**: This is a development setup. For production:
-- Use proper secret management (Azure Key Vault, HashiCorp Vault)
-- Implement proper RBAC
-- Use managed databases
-- Configure backup strategies
-- Implement monitoring and alerting
+- Use proper secret management (Azure Key Vault, HashiCorp Vault) for production.
+- Implement RBAC, monitoring, and backup strategies.
+- **TLS/HTTPS is not enabled by default. For production, always secure endpoints with HTTPS.**
+
+---
+
+## Troubleshooting
+
+- Check pod status: `kubectl get pods -A`
+- View logs: `kubectl logs <pod> -n <namespace>`
+- Check services: `kubectl get svc -A`
+- Verify secrets: `kubectl get secrets -A`

@@ -1,3 +1,5 @@
+# variable.tf - Defines variables for AKS and Azure resources
+
 variable "prefix" {
   description = "A prefix used for all resources in this example"
   default     = "keycloak"

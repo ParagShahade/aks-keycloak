@@ -1,3 +1,5 @@
+# configmap.yaml - Provides static HTML for the demo web app
+
 apiVersion: v1
 kind: ConfigMap
 metadata:

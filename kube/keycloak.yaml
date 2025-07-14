@@ -1,3 +1,5 @@
+# keycloak.yaml - Deploys Keycloak and its service in the keycloak-app namespace
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -16,7 +18,7 @@ spec:
       containers:
       - name: keycloak
         image: quay.io/keycloak/keycloak:latest
-        args: ["start-dev"]
+        args: ["start-dev"] # Development mode; use production args for prod
         env:
         - name: KC_DB
           value: postgres
@@ -28,14 +30,14 @@ spec:
           valueFrom:
             secretKeyRef:
               name: keycloak-secrets
-              key: db-password
+              key: db-password # Reference to secret
         - name: KEYCLOAK_ADMIN
           value: admin
         - name: KEYCLOAK_ADMIN_PASSWORD
           valueFrom:
             secretKeyRef:
               name: keycloak-secrets
-              key: admin-password
+              key: admin-password # Reference to secret
         ports:
         - containerPort: 8080
 ---
@@ -45,7 +47,7 @@ metadata:
   name: keycloak
   namespace: keycloak-app
 spec:
-  type: LoadBalancer
+  type: LoadBalancer # Exposes Keycloak externally
   selector:
     app: keycloak
   ports:
