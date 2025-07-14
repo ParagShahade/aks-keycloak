@@ -1,3 +1,4 @@
+# deploy_web.yaml - Deploys the static web app to the AKS cluster
 - name: Deploy Keycloak static web application
   hosts: localhost
   tasks:

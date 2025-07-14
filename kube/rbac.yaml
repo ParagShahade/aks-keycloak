@@ -1,3 +1,5 @@
+# rbac.yaml - Provides RBAC for ingress-nginx controller and related resources
+
 apiVersion: v1
 kind: ServiceAccount
 metadata:

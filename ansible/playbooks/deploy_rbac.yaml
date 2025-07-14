@@ -1,3 +1,4 @@
+# deploy_rbac.yaml - Deploys RBAC for ingress-nginx controller
 - name: Deploy ingress-nginx RBAC and patch
   hosts: localhost
   tasks:

@@ -1,3 +1,4 @@
+# deploy_oauth.yaml - Deploys the OAuth2 Proxy and related Ingress
 - name: Deploy Keycloak oauth application
   hosts: localhost
   tasks:

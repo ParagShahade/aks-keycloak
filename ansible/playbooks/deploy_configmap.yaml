@@ -1,3 +1,4 @@
+# deploy_configmap.yaml - Deploys the ConfigMap for the static web app
 - name: Deploy Keycloak static web application ConfigMap
   hosts: localhost
   tasks:

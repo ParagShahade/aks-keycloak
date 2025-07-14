@@ -1,3 +1,4 @@
+# deploy_postgres.yaml - Deploys PostgreSQL for Keycloak
 - name: Deploy Keycloak postgres
   hosts: localhost
   tasks:

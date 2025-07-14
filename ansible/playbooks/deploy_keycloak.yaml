@@ -1,3 +1,4 @@
+# deploy_keycloak.yaml - Deploys Keycloak to the AKS cluster
 - name: Deploy Keycloak
   hosts: localhost
   tasks:

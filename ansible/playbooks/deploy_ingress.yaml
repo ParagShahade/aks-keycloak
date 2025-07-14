@@ -1,3 +1,4 @@
+# deploy_ingress.yaml - Deploys the ingress controller and web app ingress
 - name: Deploy Keycloak ingress and web application
   hosts: localhost
   tasks:

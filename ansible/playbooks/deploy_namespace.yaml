@@ -1,3 +1,4 @@
+# deploy_namespace.yaml - Creates the keycloak-app and ingress namespace in the cluster
 - name: create namespace for keycloak
   hosts: localhost
   tasks:
