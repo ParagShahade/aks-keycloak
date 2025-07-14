@@ -13,22 +13,6 @@ This project deploys a secure authentication system on Azure Kubernetes Service 
 - **Terraform:** Provisions all Azure infrastructure
 - **Ansible:** Automates Kubernetes resource deployment
 - **GitHub Actions:** CI/CD for rollout, configuration, and teardown
-
----
-
-## Justification
-
-### Why these components?
-- **Keycloak:** Open-source, flexible IAM with OIDC/SAML support.
-- **OAuth2 Proxy:** Stateless, simple OIDC protection for web apps.
-- **PostgreSQL:** Reliable, open-source RDBMS, default for Keycloak.
-- **NGINX Ingress:** Standard, widely supported for Kubernetes.
-- **Terraform:** Declarative, reproducible, and cloud-agnostic IaC.
-- **Ansible:** Agentless, easy to orchestrate K8s deployments.
-- **GitHub Actions:** Native CI/CD, integrates with GitHub and cloud.
-
-### Why not alternatives?
-- Managed identity/service principal creation is out of scope.
 ---
 
 ## CI/CD Workflows
@@ -92,15 +76,6 @@ cd aks-cluster
 terraform destroy
 ```
 Or trigger the **Disassemble** workflow in GitHub Actions.
-
----
-
-## Extending the Project
-
-- **TLS/HTTPS** with cert-manager for secure traffic
-- **Monitoring** with Prometheus/Grafana
-- **Autoscaling** and advanced deployment strategies
-- **Automated secret rotation** and backup/restore
 
 ---
 
