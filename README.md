@@ -29,9 +29,6 @@ This project deploys a secure authentication system on Azure Kubernetes Service 
 
 ### Why not alternatives?
 - Managed identity/service principal creation is out of scope.
-- Other orchestrators (ECS, ACI) lack AKS/K8s features.
-- Auth0/Azure AD: Not open-source or less customizable for this demo.
-
 ---
 
 ## CI/CD Workflows
@@ -79,6 +76,10 @@ ansible-playbook ansible/playbooks/deploy_oauth.yaml
 - **Secured Web App:** `http://auth.web.com`
 
 > **Note:** This deployment uses HTTP only. For production, it is strongly recommended to enable TLS/HTTPS using cert-manager or another certificate management solution.
+
+> **DNS/Hosts Note:**
+> For local testing, you must add an entry to your `/etc/hosts` file mapping the AKS LoadBalancer IP to `auth.web.com` (e.g., `123.45.67.89 auth.web.com`).
+> Alternatively, use a real DNS record
 
 ---
 

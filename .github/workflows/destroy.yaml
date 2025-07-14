@@ -1,14 +1,11 @@
+# destroy.yaml - GitHub Actions workflow to destroy all AKS and Azure resources using Terraform
+# Triggered manually from the GitHub Actions UI for safety.
+
 name: Destroy Azure AKS With Terraform
 
 on:
-  workflow_dispatch:
-  push:
-    branches:
-      - destroy
-  pull_request:
-    branches:
-      - destroy
-      
+  workflow_dispatch:  # Manual trigger only
+
 permissions:
   id-token: write
   contents: read
@@ -46,9 +43,12 @@ jobs:
 
       - name: Terraform Validate
         run: terraform validate
-            
+
       - name: Terraform Plan (Destroy)
         run: terraform plan -destroy
 
       - name: Terraform Destroy
         run: terraform destroy -auto-approve
+
+      - name: Notify on completion
+        run: echo "Destroy complete!"
