@@ -6,3 +6,13 @@ metadata:
 spec:
   type: ExternalName
   externalName: keycloak.keycloak-app.svc.cluster.local
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-web-com
+  namespace: keycloak-app
+spec:
+  type: ExternalName
+  externalName: keycloak.keycloak-app.svc.cluster.local

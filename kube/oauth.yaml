@@ -55,7 +55,7 @@ spec:
             - --http-address=0.0.0.0:4180
             - --cookie-secure=false
             - --email-domain=*
-            - --oidc-issuer-url=http://keycloak.keycloak-app.svc.cluster.local:8080/realms/master
+            - --oidc-issuer-url=http://auth-web-com.keycloak-app.svc.cluster.local:8080/realms/master
           env:
             - name: CLIENT_SECRET
               valueFrom:
@@ -81,3 +81,4 @@ spec:
     app: oauth2-proxy
   ports:
     - port: 80
+      targetPort: 4180  # important fix
