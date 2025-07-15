@@ -24,7 +24,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: web
+                name: oauth2-proxy
                 port:
                   number: 80
 ---
