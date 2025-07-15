@@ -62,7 +62,7 @@ spec:
             - --auth-logging=true
             - --request-logging=true
             - --show-debug-on-error=true
-            - -cookie-domain=auth.web.com
+            - --cookie-domain=auth.web.com
           env:
             - name: CLIENT_SECRET
               valueFrom:
