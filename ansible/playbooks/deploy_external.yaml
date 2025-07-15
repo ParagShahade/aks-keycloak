@@ -1,0 +1,10 @@
+# deploy_web.yaml - Deploys the static web app to the AKS cluster
+- name: Deploy Keycloak external service
+  hosts: localhost
+  tasks:
+    - name: Apply Keycloak deployment
+      kubernetes.core.k8s:
+        kubeconfig: ~/.kube/config
+        state: present
+        src: ../../kube/external.yaml
+        namespace: keycloak-app
