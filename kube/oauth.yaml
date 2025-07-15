@@ -58,6 +58,10 @@ spec:
             - --cookie-secure=false
             - --email-domain=*
             - --oidc-issuer-url=http://keycloak.keycloak-app.svc.cluster.local:8080/realms/master
+            - --standard-logging=true
+            - --auth-logging=true
+            - --request-logging=true
+            - --show-debug-on-error=true
           env:
             - name: CLIENT_SECRET
               valueFrom:
