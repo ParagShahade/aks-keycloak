@@ -60,6 +60,7 @@ spec:
             - --cookie-secure=false
             - --email-domain=*
             - --oidc-issuer-url=http://keycloak.web.com/realms/master
+            - --skip-oidc-email-verification=true
           env:
             - name: CLIENT_SECRET
               valueFrom:
