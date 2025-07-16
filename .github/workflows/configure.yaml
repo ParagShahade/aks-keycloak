@@ -64,6 +64,7 @@ jobs:
           ansible-playbook ansible/playbooks/deploy_configmap.yaml
           ansible-playbook ansible/playbooks/deploy_rbac.yaml
           ansible-playbook ansible/playbooks/deploy_sa.yaml
+          ansible-playbook ansible/playbooks/deploy_coredns.yaml
           ansible-playbook ansible/playbooks/deploy_keycloak-ingress.yaml
           ansible-playbook ansible/playbooks/deploy_ingress.yaml
           ansible-playbook ansible/playbooks/deploy_oauth.yaml
