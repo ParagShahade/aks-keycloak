@@ -2,7 +2,7 @@
 - name: create namespace for keycloak
   hosts: localhost
   tasks:
-    - name: Apply Keycloak deployment
+    - name: Apply Keycloak namespace
       kubernetes.core.k8s:
         kubeconfig: ~/.kube/config
         state: present

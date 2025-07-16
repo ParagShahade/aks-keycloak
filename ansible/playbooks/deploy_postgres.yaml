@@ -2,7 +2,7 @@
 - name: Deploy Keycloak postgres
   hosts: localhost
   tasks:
-    - name: Apply Keycloak deployment
+    - name: Apply Keycloak postgres deployment
       kubernetes.core.k8s:
         kubeconfig: ~/.kube/config
         state: present
