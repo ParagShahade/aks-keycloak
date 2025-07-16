@@ -42,6 +42,10 @@ spec:
       labels:
         app: oauth2-proxy
     spec:
+      hostAliases:
+        - ip: "132.220.190.143"
+          hostnames:
+            - "keycloak.web.com"
       containers:
         - name: oauth2-proxy
           image: quay.io/oauth2-proxy/oauth2-proxy:v7.5.1
