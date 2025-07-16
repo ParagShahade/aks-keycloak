@@ -61,6 +61,7 @@ spec:
             - --email-domain=*
             - --oidc-issuer-url=http://keycloak.web.com/realms/master
             - --insecure-oidc-allow-unverified-email
+            - --scope=openid email profile
           env:
             - name: CLIENT_SECRET
               valueFrom:
