@@ -49,7 +49,6 @@ ansible-playbook ansible/playbooks/deploy_web.yaml
 ansible-playbook ansible/playbooks/deploy_configmap.yaml
 ansible-playbook ansible/playbooks/deploy_rbac.yaml
 ansible-playbook ansible/playbooks/deploy_sa.yaml
-ansible-playbook ansible/playbooks/deploy_coredns.yaml
 ansible-playbook ansible/playbooks/deploy_keycloak-ingress.yaml
 ansible-playbook ansible/playbooks/deploy_ingress.yaml
 nsible-playbook ansible/playbooks/deploy_oauth.yaml
@@ -99,23 +98,6 @@ Or trigger the **Disassemble** workflow in GitHub Actions.
 - View logs: `kubectl logs <pod> -n <namespace>`
 - Check services: `kubectl get svc -A`
 - Verify secrets: `kubectl get secrets -A`
-
-## AKS CoreDNS Custom DNS Limitation and Workaround
-
-### Issue
-Azure AKS managed clusters do not allow persistent manual edits to the CoreDNS ConfigMap. Any custom DNS entries (such as for `keycloak.web.com` or `auth.web.com`) are automatically reverted by the AKS addon manager. The Azure-supported custom CoreDNS profile feature is not yet generally available in all regions and may not be available in environment.
-
-### Attempted Solutions
-- Manual edits to the CoreDNS ConfigMap (using `hosts` blocks or `import custom.hosts`) are overwritten by AKS.
-- Mounting custom ConfigMaps and patching the CoreDNS deployment does not persist.
-- Azure CLI-based custom CoreDNS profiles are not available in all clusters/regions.
-
-### Recommendation
-- Monitor Azure AKS release notes for the general availability of persistent custom CoreDNS profiles.
-- For production, use Ingress or a public DNS name for all OIDC endpoints if possible.
-
-> **Note:**
-> The files `kube/coredns-custom.yaml`, `kube/coredns-patch.yaml`, and `kube/coredns-custom-combined.yaml` are **deprecated and not in use** due to AKS CoreDNS limitations. Manual or automated changes to CoreDNS are reverted by the AKS addon manager.
 
 ## OIDC, Keycloak, and OAuth2 Proxy: Final Working Solution
 
