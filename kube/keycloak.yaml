@@ -51,6 +51,7 @@ metadata:
   name: keycloak
   namespace: keycloak-app
 spec:
+  type: LoadBalancer # Exposes Keycloak externally
   selector:
     app: keycloak
   ports:
