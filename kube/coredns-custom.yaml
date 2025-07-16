@@ -1,31 +1,24 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: coredns-custom
-  namespace: kube-system
-data:
-  custom.hosts: |
-    10.0.6.199 keycloak.web.com
-    10.0.18.183 auth.web.com
+# DEPRECATED: This file is not in use due to AKS CoreDNS limitations.
+# Manual or automated changes to CoreDNS are reverted by the AKS addon manager.
+# See the README for details and the current workaround.
+#
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: coredns-custom
+#   namespace: kube-system
+# data:
+#   custom.hosts: |
+#     10.0.6.199 keycloak.web.com
+#     10.0.18.183 auth.web.com
 ---
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: coredns
-  namespace: kube-system
-spec:
-  template:
-    spec:
-      volumes:
-        - name: custom-hosts
-          configMap:
-            name: coredns-custom
-            items:
-              - key: custom.hosts
-                path: custom.hosts
-      containers:
-        - name: coredns
-          volumeMounts:
-            - name: custom-hosts
-              mountPath: /etc/coredns/custom.hosts
-              subPath: custom.hosts 
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: coredns
+#  namespace: kube-system
+#spec:
+#  template:
+#    spec:
+#      volumes:
+#
