@@ -1,0 +1,10 @@
+# deploy_web.yaml - Deploys the ingress controller for Keycloak
+- name: Deploy Keycloak ingress and web application
+  hosts: localhost
+  tasks:
+    - name: Apply Keycloak ingress deployment
+      kubernetes.core.k8s:
+        kubeconfig: ~/.kube/config
+        state: present
+        src: ../../kube/web.yaml
+        namespace: keycloak-app
