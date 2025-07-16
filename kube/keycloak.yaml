@@ -20,6 +20,10 @@ spec:
         image: quay.io/keycloak/keycloak:latest
         args: ["start-dev"] # Development mode; use production args for prod
         env:
+        - name: KC_HOSTNAME
+          value: keycloak.web.com
+        - name: KC_HOSTNAME_URL
+          value: http://keycloak.web.com
         - name: KC_DB
           value: postgres
         - name: KC_DB_URL
