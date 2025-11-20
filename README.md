@@ -4,6 +4,9 @@ This project deploys a secure authentication system on Azure Kubernetes Service 
 
 ---
 
+![AKS-ARCHITECTURE](aks-arch.png)
+
+
 **Components:**
 - **Keycloak:** Open-source identity and access management (IAM)
 - **PostgreSQL:** Database for Keycloak
